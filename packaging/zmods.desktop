@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=ZMods
+GenericName=Mod Manager
+Comment=Keep a pool of mods per game and apply them on demand
+Exec=/usr/bin/zmods
+TryExec=/usr/bin/zmods
+Icon=zmods
+Terminal=false
+Categories=Utility;
+Keywords=mods;games;modding;
+StartupWMClass=zmods

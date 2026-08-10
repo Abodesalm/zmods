@@ -1,0 +1,41 @@
+# Maintainer: YOUR NAME <you@example.com>
+#
+# Repackages the prebuilt .deb from a GitHub release, so users do not need a
+# Rust toolchain. Publish this as `zmods-bin` on the AUR.
+# Bump pkgver, then run `updpkgsums` to refresh the checksum below.
+
+pkgname=zmods-bin
+_pkgname=zmods
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Desktop mod manager — keep a pool of mods per game and apply them on demand"
+arch=('x86_64')
+url="https://github.com/abodesalm/zmods"
+license=('MIT') # must match the LICENSE file in the repo
+depends=('webkit2gtk-4.1' 'gtk3' 'hicolor-icon-theme')
+provides=("$_pkgname=$pkgver")
+conflicts=("$_pkgname")
+# Already stripped by the release build.
+options=('!strip' '!debug')
+source=("$_pkgname-$pkgver.deb::$url/releases/download/v$pkgver/ZMods_${pkgver}_amd64.deb"
+        "zmods.desktop")
+sha256sums=('SKIP'
+            'SKIP')
+noextract=("$_pkgname-$pkgver.deb")
+
+package() {
+  # A .deb is an ar archive holding data.tar.gz with the /usr tree inside.
+  bsdtar -xOf "$_pkgname-$pkgver.deb" data.tar.gz | bsdtar -xzf - -C "$pkgdir"
+
+  # Tauri's generated entry is minimal; ship ours instead.
+  rm -f "$pkgdir/usr/share/applications/ZMods.desktop"
+  install -Dm644 "$srcdir/zmods.desktop" \
+    "$pkgdir/usr/share/applications/zmods.desktop"
+
+  # Tauri emits a "256x256@2" directory, which is not a valid icon theme size.
+  if [[ -d "$pkgdir/usr/share/icons/hicolor/256x256@2" ]]; then
+    install -Dm644 "$pkgdir/usr/share/icons/hicolor/256x256@2/apps/zmods.png" \
+      "$pkgdir/usr/share/icons/hicolor/256x256/apps/zmods.png"
+    rm -rf "$pkgdir/usr/share/icons/hicolor/256x256@2"
+  fi
+}

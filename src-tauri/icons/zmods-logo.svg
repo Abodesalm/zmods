@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#191c25"/>
+      <stop offset="55%" stop-color="#101219"/>
+      <stop offset="100%" stop-color="#0a0b0e"/>
+    </linearGradient>
+    <linearGradient id="mark" x1="0.1" y1="0" x2="0.9" y2="1">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="45%" stop-color="#7c5cff"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.20"/>
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="26" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect x="0" y="0" width="1024" height="1024" rx="228" fill="url(#bg)"/>
+  <rect x="6" y="6" width="1012" height="1012" rx="222" fill="none" stroke="url(#rim)" stroke-width="12"/>
+
+  <g filter="url(#glow)" opacity="0.55">
+    <path d="M260,280 L764,280 L764,392 L452,632 L764,632 L764,744 L260,744 L260,632 L572,392 L260,392 Z"
+          fill="url(#mark)"/>
+  </g>
+  <path d="M260,280 L764,280 L764,392 L452,632 L764,632 L764,744 L260,744 L260,632 L572,392 L260,392 Z"
+        fill="url(#mark)" stroke="url(#mark)" stroke-width="26" stroke-linejoin="round"/>
+</svg>

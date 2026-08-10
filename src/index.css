@@ -1,0 +1,224 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Bundled fonts — no network access required at runtime. */
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/jetbrains-mono";
+@import "@fontsource-variable/ibm-plex-sans";
+@import "@fontsource-variable/roboto";
+@import "@fontsource/fira-sans/400.css";
+@import "@fontsource/fira-sans/500.css";
+@import "@fontsource/fira-sans/600.css";
+@import "@fontsource/fira-sans/700.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------ */
+/*  Design tokens                                                      */
+/* ------------------------------------------------------------------ */
+
+:root {
+  /* Accent is overwritten at runtime from settings.accent_color */
+  --accent: #7c5cff;
+  --accent-fg: #ffffff;
+  --accent-hover: #7c5cff;
+
+  --app-font: "Inter Variable";
+
+  /* Light theme */
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --surface-2: #f0f2f5;
+  --surface-3: #e6e9ee;
+  --border: #e1e4ea;
+  --border-strong: #c9ced8;
+  --fg: #14161a;
+  --fg-muted: #59606e;
+  --fg-subtle: #858c9a;
+
+  --success: #15803d;
+  --success-bg: #dcfce7;
+  --warning: #a16207;
+  --warning-bg: #fef3c7;
+  --danger: #b91c1c;
+  --danger-bg: #fee2e2;
+  --neutral: #4b5563;
+  --neutral-bg: #e5e7eb;
+
+  --shadow-color: 220 40% 20%;
+
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #0a0b0e;
+  --surface: #121419;
+  --surface-2: #1a1d24;
+  --surface-3: #23272f;
+  --border: #262a33;
+  --border-strong: #363c48;
+  --fg: #e9ebef;
+  --fg-muted: #8b919e;
+  --fg-subtle: #626977;
+
+  --success: #4ade80;
+  --success-bg: #052e1a;
+  --warning: #fbbf24;
+  --warning-bg: #2e2206;
+  --danger: #f87171;
+  --danger-bg: #350f11;
+  --neutral: #9ca3af;
+  --neutral-bg: #1f2229;
+
+  --shadow-color: 220 60% 2%;
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-hover: var(--accent-hover);
+
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --color-neutral: var(--neutral);
+  --color-neutral-bg: var(--neutral-bg);
+
+  --font-sans: var(--app-font), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, monospace;
+
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Base                                                               */
+/* ------------------------------------------------------------------ */
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--app-font), ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow: hidden;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--accent) 32%, transparent);
+    color: var(--fg);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* Native-feeling thin scrollbars */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--border-strong);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--fg-subtle);
+  }
+
+  /* Desktop app: no text selection chrome unless it is content */
+  button,
+  [role="button"],
+  [role="menuitem"],
+  [role="option"] {
+    user-select: none;
+  }
+
+  input,
+  textarea {
+    font-family: inherit;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Utilities                                                          */
+/* ------------------------------------------------------------------ */
+
+@utility drag-region {
+  -webkit-app-region: drag;
+}
+
+@utility no-drag {
+  -webkit-app-region: no-drag;
+}
+
+/* Accent-tinted glow used on primary buttons and active nav items */
+@utility accent-glow {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--accent) 45%, transparent),
+    0 6px 20px -6px color-mix(in oklab, var(--accent) 55%, transparent);
+}
+
+@utility surface-panel {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+}
+
+/* Cross-fade for hero/cover imagery */
+@keyframes zm-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@utility fade-in-img {
+  animation: zm-fade-in 260ms ease-out both;
+}

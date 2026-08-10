@@ -1,0 +1,58 @@
+# Maintainer: YOUR NAME <you@example.com>
+#
+# Builds ZMods from a tagged GitHub release.
+# Bump pkgver, then run `updpkgsums` to refresh the checksum below.
+
+pkgname=zmods
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Desktop mod manager — keep a pool of mods per game and apply them on demand"
+arch=('x86_64')
+url="https://github.com/abodesalm/zmods"
+license=('MIT') # must match the LICENSE file in the repo
+depends=('webkit2gtk-4.1' 'gtk3' 'hicolor-icon-theme')
+makedepends=('cargo' 'nodejs' 'npm')
+# Cargo.toml already sets lto/strip in [profile.release]; let it win.
+options=('!lto' '!debug')
+source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz"
+        "zmods.desktop")
+sha256sums=('SKIP'
+            'SKIP')
+
+prepare() {
+  cd "$pkgname-$pkgver"
+  npm ci
+  export RUSTUP_TOOLCHAIN=stable
+  # Host target only — the default pulls every platform's deps, including
+  # Windows crates this build will never touch.
+  cargo fetch --locked --target "$CARCH-unknown-linux-gnu" \
+    --manifest-path src-tauri/Cargo.toml
+}
+
+build() {
+  cd "$pkgname-$pkgver"
+  export RUSTUP_TOOLCHAIN=stable
+  # Do not set CARGO_TARGET_DIR: tauri runs cargo from src-tauri/, so a
+  # relative value nests into src-tauri/src-tauri/. The default is correct.
+  # --no-bundle: pacman is doing the packaging, we only need the binary.
+  npm run tauri -- build --no-bundle
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+
+  install -Dm755 "src-tauri/target/release/zmods" "$pkgdir/usr/bin/zmods"
+  install -Dm644 "$srcdir/zmods.desktop" \
+    "$pkgdir/usr/share/applications/zmods.desktop"
+
+  install -Dm644 "src-tauri/icons/32x32.png" \
+    "$pkgdir/usr/share/icons/hicolor/32x32/apps/zmods.png"
+  install -Dm644 "src-tauri/icons/128x128.png" \
+    "$pkgdir/usr/share/icons/hicolor/128x128/apps/zmods.png"
+  install -Dm644 "src-tauri/icons/128x128@2x.png" \
+    "$pkgdir/usr/share/icons/hicolor/256x256/apps/zmods.png"
+
+  install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  # Uncomment once the repo has a LICENSE file:
+  # install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

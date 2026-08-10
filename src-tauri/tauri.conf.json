@@ -1,0 +1,49 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "ZMods",
+  "version": "0.1.0",
+  "identifier": "app.zmods.desktop",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "ZMods",
+        "width": 1360,
+        "height": 860,
+        "minWidth": 980,
+        "minHeight": 640,
+        "resizable": true,
+        "center": true,
+        "theme": "Dark",
+        "backgroundColor": "#0a0b0e"
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self'"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "category": "Utility",
+    "shortDescription": "Desktop mod manager",
+    "longDescription": "ZMods is a desktop mod manager: keep a pool of mods per game and apply, disable, update or remove them from your game folders.",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "linux": {
+      "deb": {
+        "depends": []
+      }
+    }
+  }
+}
