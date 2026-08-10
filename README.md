@@ -272,8 +272,3 @@ git tag v0.1.0 && git push --tags
 Issues and pull requests are welcome. See
 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for how the codebase is laid out and
 which invariants matter.
-
-## License
-
-Not chosen yet — add a `LICENSE` file before sharing this publicly.
-[choosealicense.com](https://choosealicense.com) is a good place to start.
